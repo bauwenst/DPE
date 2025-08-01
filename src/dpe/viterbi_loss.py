@@ -54,13 +54,9 @@ def viterbiSum_backward(sentence: str, vocab: set[str], loglikelihoods: Tensor) 
     #           = log sum_{j=1..n} exp(logP(string[j:end]) + grid[j])
     # which is the backwards formula in He 2020.
     for i in range(n):  # The starting index of the token.
-        log_marginal_probabilities[i] = torch.log(
-            sum(
-                torch.exp(
-                    log_marginal_probabilities[i-k-1] + loglikelihoods[i-k-1][k]
-                )
-                for k in range(max_k) if sentence[i-k-1:i] not in vocab
-            )
+        log_marginal_probabilities[i] = torch.log(sum(torch.exp(   # TODO: torch.logsumexp exists bro
+            log_marginal_probabilities[i-k-1] + loglikelihoods[i-k-1][k]
         )
+        for k in range(min(max_k,i)) if sentence[i-k-1:i] not in vocab))  # TODO: This in-check should be precomputed by the DataLoader, just like the attention mask. It should be implemented with masks.
 
     return log_marginal_probabilities[-1]
