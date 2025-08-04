@@ -1,0 +1,17 @@
+[project]
+name = "dpe"  # This is actually the name of the package on PyPI, whereas the name we import is the name of the folder containing our package.
+version = "v0.1.0"
+description = "Attempted working reimplementation of the Dynamic Programming Encoding (DPE) tokeniser."
+authors = [
+    {name = "Thomas Bauwens", email = "thomas.bauwens@kuleuven.be"}
+]
+dependencies = [
+    "torch"
+]
+
+[build-system]
+requires = ["hatchling"]  # Better than setuptools for separating distribution name from package name.
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["./src/dpe"]  # This is the path where the code is, which again determines by what name you import it.
